@@ -1,0 +1,40 @@
+.email-completer-wrapper {
+  position: relative;
+  width: auto;
+
+  input {
+    //height: 36px;
+  }
+
+  .email-domains {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 2px solid #ccc;
+    z-index: 99;
+    background: white;
+    text-align: left;
+
+    &:empty {
+      display: none;
+    }
+
+    li {
+      padding-left: 0.5rem;
+      cursor: pointer;
+      border-bottom: 1px solid #ccc;
+
+      &.selected {
+        background: #ccc;
+      }
+
+      &:hover {
+        background: #ccc;
+      }
+    }
+  }
+}
