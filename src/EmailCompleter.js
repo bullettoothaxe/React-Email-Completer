@@ -133,11 +133,11 @@ class EmailCompleter extends Component {
     return (
       <div className="email-completer-wrapper">
         <input {...inputProps}
-          value={this.state.value}
-          onBlur={::this.handleBlur}
-          onChange={this.composeEventHandlers(::this.changeValue, inputProps.onChange)}
-          onKeyDown={this.composeEventHandlers(::this.handleKeyDown, inputProps.onKeyDown)}
-          autoComplete="off"
+               value={this.state.value}
+               onBlur={::this.handleBlur}
+               onChange={this.composeEventHandlers(::this.changeValue, inputProps.onChange)}
+               onKeyDown={this.composeEventHandlers(::this.handleKeyDown, inputProps.onKeyDown)}
+               autoComplete="off"
         />
 
         <ul className={ (!this.state.hint ? 'hide' : '') + ' email-domains' }>
