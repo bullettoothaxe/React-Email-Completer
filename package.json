@@ -1,0 +1,24 @@
+{
+  "name": "react-email-completer",
+  "version": "1.0.0",
+  "description": "domains completer for email fields",
+  "main": "./src/EmailCompleter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bullettoothaxe/React-Email-Completer.git"
+  },
+  "keywords": [
+    "react",
+    "email",
+    "completer"
+  ],
+  "author": "bullettoothaxe@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bullettoothaxe/React-Email-Completer/issues"
+  },
+  "homepage": "https://github.com/bullettoothaxe/React-Email-Completer#readme"
+}
