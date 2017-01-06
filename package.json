@@ -2,7 +2,7 @@
   "name": "react-email-completer",
   "version": "1.0.0",
   "description": "domains completer for email fields",
-  "main": "./src/EmailCompleter.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
