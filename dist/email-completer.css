@@ -1,0 +1,31 @@
+.email-completer-wrapper {
+    position: relative;
+    width: auto;
+}
+.email-completer-wrapper .email-domains {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 2px solid #ccc;
+    z-index: 99;
+    background: white;
+    text-align: left;
+}
+.email-completer-wrapper .email-domains:empty {
+    display: none;
+}
+.email-completer-wrapper .email-domains li {
+    padding-left: 0.5rem;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+}
+.email-completer-wrapper .email-domains li.selected {
+    background: #ccc;
+}
+.email-completer-wrapper .email-domains li:hover {
+    background: #ccc;
+}

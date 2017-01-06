@@ -13,6 +13,7 @@ npm install react-email-completer --save
 **Usage:**
 ```javascript
 import EmailCompleter from 'react-email-completer';
+import 'react-email-completer/dist/email-completer.css';
 
 //...
 
