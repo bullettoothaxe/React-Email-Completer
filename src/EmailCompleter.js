@@ -1,136 +1,162 @@
 "use strict";
 
-import React, { Component, PropTypes } from 'react'
+import React, {Component, PropTypes} from 'react'
 import {
-    getDomains,
-    getEmailWithDomain,
-    domains
+  getDomains,
+  getEmailWithDomain,
+  domains
 } from './helpers'
 
+
 class EmailCompleter extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            value: this.props.value || '',
-            hint: false,
-            highlightedIndex: null,
-            activeDomains: []
-        };
-    }
-
-    static propTypes = {
-        domains: PropTypes.array
+    this.state = {
+      value             : '',   // input value
+      hint              : false,// show completer
+      highlightedIndex  : null, // selected domain by arrows
+      activeDomains     : [],   // completer list
+      completerMouseDown: false // clicked on completer list
     };
+  }
 
-    static defaultProps = {
-        domains
-    };
+  static propTypes = {
+    domains: PropTypes.array
+  };
 
-    keyDownHandlers =  {
-        ArrowDown(event) {
-            event.preventDefault();
+  static defaultProps = {
+    domains
+  };
 
-            const itemsLength = this.state.activeDomains.length;
+  keyDownHandlers = {
+    ArrowDown(event) {
+      event.preventDefault();
 
-            if (!itemsLength) return;
+      const itemsLength = this.state.activeDomains.length;
 
-            let { highlightedIndex } = this.state,
-                index = (
-                    highlightedIndex === null ||
-                    highlightedIndex === itemsLength - 1
-                ) ?  0 : highlightedIndex + 1;
+      if (!itemsLength) return;
 
-            this.setState({
-                highlightedIndex: index
-            });
-        },
-        ArrowUp(event) {
-            event.preventDefault();
+      let {highlightedIndex} = this.state,
+          index = (
+            highlightedIndex === null ||
+            highlightedIndex === itemsLength - 1
+          ) ? 0 : highlightedIndex + 1;
 
-            const itemsLength = this.state.activeDomains.length;
+      this.setState({
+        highlightedIndex: index
+      });
+    },
+    ArrowUp(event) {
+      event.preventDefault();
 
-            if (!itemsLength) return;
+      const itemsLength = this.state.activeDomains.length;
 
-            let { highlightedIndex } = this.state,
-                index = (
-                    highlightedIndex === 0 ||
-                    highlightedIndex === null
-                ) ? itemsLength - 1 : highlightedIndex - 1;
+      if (!itemsLength) return;
 
-            this.setState({
-                highlightedIndex: index
-            });
-        },
-        Enter(event) {
-            event.preventDefault();
+      let {highlightedIndex} = this.state,
+          index = (
+            highlightedIndex === 0 ||
+            highlightedIndex === null
+          ) ? itemsLength - 1 : highlightedIndex - 1;
 
-            if (!this.state.hint || this.state.highlightedIndex === null) return;
+      this.setState({
+        highlightedIndex: index
+      });
+    },
+    Enter(event) {
+      event.preventDefault();
 
-            let value = getEmailWithDomain(this.state.value, this.state.activeDomains[this.state.highlightedIndex]);
+      if (!this.state.hint || this.state.highlightedIndex === null) return;
 
-            this.complete(value);
-        }
-    };
+      let value = getEmailWithDomain(this.state.value, this.state.activeDomains[this.state.highlightedIndex]);
 
-    composeEventHandlers (internal, external) {
-        return external
-            ? e => { internal(e); external(e); }
-            : internal
+      this.complete(value);
     }
+  };
 
-    handleKeyDown (event) {
-        if (this.keyDownHandlers[event.key]) {
-            this.keyDownHandlers[event.key].call(this, event);
-        }
+  composeEventHandlers(internal, external) {
+    return external
+      ? e => { internal(e);external(e); }
+      : internal
+  }
+
+  handleKeyDown(event) {
+    if (this.keyDownHandlers[event.key]) {
+      this.keyDownHandlers[event.key].call(this, event);
     }
+  }
 
-    changeValue(e) {
-        let activeDomains = getDomains(e.target.value, this.props.domains);
-
-        this.setState({
-            value: e.target.value,
-            hint: true,
-            activeDomains,
-            highlightedIndex: null
-        });
+  handleBlur(event) {
+    if (!this.state.activeDomains.length) {
+      this.props.onBlur ? this.props.onBlur(event) : null;
+    } else {
+      if (!this.state.completerMouseDown) {
+        this.closeHint();
+        this.props.onBlur ? this.props.onBlur(event) : null;
+      }
     }
+  }
 
-    complete(value) {
-        this.setState({
-            value,
-            hint: false
-        });
-    }
+  handleMouseDown(event) {
+    this.setState({ completerMouseDown: true });
+  }
 
-    render() {
-        let { domains, ...inputProps } = this.props;
+  changeValue(e) {
+    let value= e.target.value,
+        activeDomains = getDomains(value, this.props.domains);
 
-        return (
-            <div className="email-completer-wrapper">
-                <input {...inputProps}
-                       value={this.state.value}
-                       onChange={this.composeEventHandlers(::this.changeValue, inputProps.onChange)}
-                       onKeyDown={this.composeEventHandlers(::this.handleKeyDown, inputProps.onKeyDown)}
-                       autoComplete="off"
-                />
+    this.setState({
+      hint            : true,
+      highlightedIndex: null,
+      activeDomains,
+      value
+    });
+  }
 
-                <ul className={ (!this.state.hint ? 'hide' : '') + ' email-domains' } >
-                    {
-                        this.state.activeDomains.map(
-                            (domain, index) =>
-                        <li key={index}
-                            className={ this.state.highlightedIndex == index ? 'selected' : ''}
-                            onClick={this.complete.bind(this, getEmailWithDomain(this.state.value, domain))}
-                        >
-                            { getEmailWithDomain(this.state.value, domain) }
-                        </li>
-                    )
-                    }
-                </ul>
-            </div>
-        );
-    }
+  closeHint() {
+    this.setState({
+      hint              : false,
+      activeDomains     : [],
+      completerMouseDown: false
+    });
+  }
+
+  complete(value) {
+    this.setState({ value });
+    this.closeHint();
+  }
+
+  render() {
+    let {domains, ...inputProps} = this.props;
+
+    return (
+      <div className="email-completer-wrapper">
+        <input {...inputProps}
+          value={this.state.value}
+          onBlur={::this.handleBlur}
+          onChange={this.composeEventHandlers(::this.changeValue, inputProps.onChange)}
+          onKeyDown={this.composeEventHandlers(::this.handleKeyDown, inputProps.onKeyDown)}
+          autoComplete="off"
+        />
+
+        <ul className={ (!this.state.hint ? 'hide' : '') + ' email-domains' }>
+          {
+            this.state.activeDomains.map(
+              (domain, index) =>
+                <li key={index}
+                    onMouseDown={::this.handleMouseDown}
+                    className={ this.state.highlightedIndex == index ? 'selected' : ''}
+                    onClick={this.complete.bind(this, getEmailWithDomain(this.state.value, domain))}
+                >
+                  { getEmailWithDomain(this.state.value, domain) }
+                </li>
+            )
+          }
+        </ul>
+      </div>
+    );
+  }
 }
 
 export default EmailCompleter;
