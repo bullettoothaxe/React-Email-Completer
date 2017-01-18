@@ -18,7 +18,7 @@ import 'react-email-completer/dist/email-completer.css';
 //...
 
 <div>
-  <EmailCompleter type="email" placeholder="Email" />
+  <EmailCompleter type="email" placeholder="Email" domains={ ["gmail.com", "yahoo.com"] } />
 <div/>
 ```
 
