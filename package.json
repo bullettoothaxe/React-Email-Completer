@@ -1,6 +1,6 @@
 {
   "name": "react-email-completer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "domains completer for email fields",
   "main": "./dist/index.js",
   "scripts": {
